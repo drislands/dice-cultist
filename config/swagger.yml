@@ -1,0 +1,193 @@
+swagger: "2.0"
+info:
+    description: Shed your blood for the greater good...
+    version: "0.0.1"
+    title: Dice Cultist API
+consumes:
+    - application/x-www-form-urlencoded
+produces:
+    - application/json
+
+basePath: /api
+
+paths:
+    /backronym/start:
+        post:
+            operationId: backronym.start
+            tags:
+                - Backronyms
+            summary: Starts a game of backronyms!
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/ready:
+        post:
+            operationId: backronym.ready
+            tags:
+                - Backronyms
+            summary: Begins a game of Backronyms! Only usable once players have joined.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/players:
+        post:
+            operationId: backronym.getPlayers
+            tags:
+                - Backronyms
+            summary: Gets a list of active players for the current game.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/score:
+        post:
+            operationId: backronym.getScore
+            tags:
+                - Backronyms
+            summary: Gets the user's score.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/join:
+        post:
+            operationId: backronym.join
+            tags:
+                - Backronyms
+            summary: Joins the player to the current game.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/help:
+        post:
+            operationId: backronym.help
+            tags:
+                - Backronyms
+            summary: Prints help information to the player.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym:
+        post:
+            operationId: backronym.set
+            tags:
+                - Backronyms
+            summary: Sets the word for the round if you are the host, or sets your answer if you are a contestant.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/answers:
+        post:
+            operationId: backronym.getAnswers
+            tags:
+                - Backronyms
+            summary: Provides all the answers given so far this round.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/word:
+        post:
+            operationId: backronym.getWord
+            tags:
+                - Backronyms
+            summary: Gets the word or phrase that has been set for this round.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/nudge:
+        post:
+            operationId: backronym.nudge
+            tags:
+                - Backronyms
+            summary: Pings players that have yet to provide an answer this round. Only usable by the host.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/pick:
+        post:
+            operationId: backronym.pickWinner
+            tags:
+                - Backronyms
+            summary: Picks the winner for this round.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/quit:
+        post:
+            operationId: backronym.dropOut
+            tags:
+                - Backronyms
+            summary: Removes the activating player from the game, or kicks the specified player if used by the host.
+            parameters:
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
