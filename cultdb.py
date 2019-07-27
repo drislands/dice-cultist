@@ -67,7 +67,7 @@ def deactivatePlayer(DB,player):
 def getActivePlayerCount(DB):
     """Gets the number of active players."""
     (c,conn) = cn(DB)
-    c.execute('SELECT COUNT(*) FROM Users WHERE active=1')
+    c.execute('SELECT COUNT(*) FROM Users WHERE active="1"')
     results = c.fetchone()
     conn.close()
     return int(results[0])
@@ -75,7 +75,44 @@ def getActivePlayerCount(DB):
 def getWaitingPlayerCount(DB):
     """Gets the number of players waiting for the next round."""
     (c,conn) = cn(DB)
-    c.execute('SELECT COUNT(*) FROM Users WHERE active=2')
+    c.execute('SELECT COUNT(*) FROM Users WHERE active="2"')
     results = c.fetchone()
     conn.close()
     return int(results[0])
+
+def getHost(DB):
+    (c,conn) = cn(DB)
+    c.execute('SELECT value FROM Data WHERE item="host"')
+    results = c.fetchall()
+    conn.close()
+    if len(results) != 1:
+        pass # this should not happen.
+    else:
+        res = results[0][0]
+        return res
+
+def setHost(DB,user_id):
+    """Sets the game host."""
+    (c,conn) = cn(DB)
+    c.execute('UPDATE Data SET value="%s" WHERE item="host"' % user_id)
+    conn.commit()
+    conn.close()
+
+def getContestents(DB):
+    """Returns a list of all the contestents' usernames."""
+    (c,conn) = cn(DB)
+    host = getHost(DB)
+    if host == "unset":
+        pass # This means there is no host.
+    c.execute('SELECT userid FROM Users WHERE userid!="%s" AND active="1"' % host)
+    results = c.fetchall()
+    res = [x[0] for x in results]
+    return res
+
+def resetGame(DB):
+    (c,conn) = cn(DB)
+    c.execute('UPDATE Data SET value="0" WHERE item="stage"')
+    c.execute('UPDATE Data SET value="unset" WHERE item="host" OR item="word"')
+    c.execute('UPDATE Users SET active="0"')
+    conn.commit()
+    conn.close()

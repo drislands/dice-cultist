@@ -26,6 +26,9 @@ paths:
                   in: formData
                   required: True
                   type: string
+            responses:
+                200:
+                    description: Successfully authenticated.
     /backronym/start:  # /bk-start
         post:
             operationId: backronym.start
@@ -41,183 +44,186 @@ paths:
                   in: formData
                   required: True
                   type: string
-    /backronym/players: #/bk-getPlayers
-        post:
-            operationId: backronym.getPlayers
-            tags:
-                - Backronyms
-            summary: Gets a list of active players for the current game.
-            parameters:
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/score:  # /bk-getScore   [[eph]]
-        post:
-            operationId: backronym.getScore
-            tags:
-                - Backronyms
-            summary: Gets the user's score.
-            parameters:
-                - name: user_id
-                  in: formData
-                  required: True
-                  type: string
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/join:   # /bk-join
-        post:
-            operationId: backronym.join
-            tags:
-                - Backronyms
-            summary: Joins the player to the current game.
-            parameters:
-                - name: user_id
-                  in: formData
-                  required: True
-                  type: string
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/help:   # /bk-help    [[eph]]
-        post:
-            operationId: backronym.help
-            tags:
-                - Backronyms
-            summary: Prints help information to the player.
-            parameters:
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/set/word: #/bk-setWord [WORD]
-        post:
-            operationId: backronym.setWord
-            tags:
-                - Backronyms
-            summary: Sets the word for the round if you are the host.
-            parameters:
-                - name: user_id
-                  in: formData
-                  required: True
-                  type: string
-                - name: text
-                  in: formData
-                  required: True
-                  type: string
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/set/phrase: #/bk-setPhrase [Insert a PHRASE]
-        post:
-            operationId: backronym.setPhrase
-            tags:
-                - Backronyms
-            summary: Sets the phrase for the round if you are the host.
-            parameters:
-                - name: user_id
-                  in: formData
-                  required: True
-                  type: string
-                - name: text
-                  in: formData
-                  required: True
-                  type: string
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/set/answer: #/bk-setAnswer [Insert Your Answer] [[eph]]
-        post:
-            operationId: backronym.setAnswer
-            tags:
-                - Backronyms
-            summary: Sets the your answer if you are a contestant.
-            parameters:
-                - name: user_id
-                  in: formData
-                  required: True
-                  type: string
-                - name: text
-                  in: formData
-                  required: True
-                  type: string
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/answers: #/bk-getAnswers
-        post:
-            operationId: backronym.getAnswers
-            tags:
-                - Backronyms
-            summary: Provides all the answers given for this round. Only usable once all answers are sent in.
-            parameters:
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/word:   # /bk-getWord   [[eph]]
-        post:
-            operationId: backronym.getWord
-            tags:
-                - Backronyms
-            summary: Gets the word or phrase that has been set for this round.
-            parameters:
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/nudge:  # /bk-nudge
-        post:
-            operationId: backronym.nudge
-            tags:
-                - Backronyms
-            summary: Pings players that have yet to provide an answer this round. Only usable by the host.
-            parameters:
-                - name: user_id
-                  in: formData
-                  required: True
-                  type: string
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/pick:   # /bk-pick [@user]
-        post:
-            operationId: backronym.pickWinner
-            tags:
-                - Backronyms
-            summary: Picks the winner for this round. Only usable by the host.
-            parameters:
-                - name: user_id
-                  in: formData
-                  required: True
-                  type: string
-                - name: text
-                  in: formData
-                  required: True
-                  type: string
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
-    /backronym/quit:   # /bk-quit
-        post:
-            operationId: backronym.dropOut
-            tags:
-                - Backronyms
-            summary: Removes the activating player from the game.
-            parameters:
-                - name: user_id
-                  in: formData
-                  required: True
-                  type: string
-                - name: token
-                  in: formData
-                  required: True
-                  type: string
+            responses:
+                200:
+                    description: Successfully authenticated.
+                    #    /backronym/players: #/bk-getPlayers
+                    #        post:
+                    #            operationId: backronym.getPlayers
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Gets a list of active players for the current game.
+                    #            parameters:
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/score:  # /bk-getScore   [[eph]]
+                    #        post:
+                    #            operationId: backronym.getScore
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Gets the user's score.
+                    #            parameters:
+                    #                - name: user_id
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/join:   # /bk-join
+                    #        post:
+                    #            operationId: backronym.join
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Joins the player to the current game.
+                    #            parameters:
+                    #                - name: user_id
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/help:   # /bk-help    [[eph]]
+                    #        post:
+                    #            operationId: backronym.help
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Prints help information to the player.
+                    #            parameters:
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/set/word: #/bk-setWord [WORD]
+                    #        post:
+                    #            operationId: backronym.setWord
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Sets the word for the round if you are the host.
+                    #            parameters:
+                    #                - name: user_id
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: text
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/set/phrase: #/bk-setPhrase [Insert a PHRASE]
+                    #        post:
+                    #            operationId: backronym.setPhrase
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Sets the phrase for the round if you are the host.
+                    #            parameters:
+                    #                - name: user_id
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: text
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/set/answer: #/bk-setAnswer [Insert Your Answer] [[eph]]
+                    #        post:
+                    #            operationId: backronym.setAnswer
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Sets the your answer if you are a contestant.
+                    #            parameters:
+                    #                - name: user_id
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: text
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/answers: #/bk-getAnswers
+                    #        post:
+                    #            operationId: backronym.getAnswers
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Provides all the answers given for this round. Only usable once all answers are sent in.
+                    #            parameters:
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/word:   # /bk-getWord   [[eph]]
+                    #        post:
+                    #            operationId: backronym.getWord
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Gets the word or phrase that has been set for this round.
+                    #            parameters:
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/nudge:  # /bk-nudge
+                    #        post:
+                    #            operationId: backronym.nudge
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Pings players that have yet to provide an answer this round. Only usable by the host.
+                    #            parameters:
+                    #                - name: user_id
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/pick:   # /bk-pick [@user]
+                    #        post:
+                    #            operationId: backronym.pickWinner
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Picks the winner for this round. Only usable by the host.
+                    #            parameters:
+                    #                - name: user_id
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: text
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #    /backronym/quit:   # /bk-quit
+                    #        post:
+                    #            operationId: backronym.dropOut
+                    #            tags:
+                    #                - Backronyms
+                    #            summary: Removes the activating player from the game.
+                    #            parameters:
+                    #                - name: user_id
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
+                    #                - name: token
+                    #                  in: formData
+                    #                  required: True
+                    #                  type: string
