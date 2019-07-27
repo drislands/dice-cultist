@@ -27,8 +27,12 @@ paths:
             operationId: backronym.start
             tags:
                 - Backronyms
-            summary: Begins a game of Backronyms! Only usable once players have joined.
+            summary: Begins a game of Backronyms! Only usable by the host once players have joined.
             parameters:
+                - name: user_id
+                  in: formData
+                  required: True
+                  type: string
                 - name: token
                   in: formData
                   required: True

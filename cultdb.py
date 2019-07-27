@@ -1,5 +1,14 @@
 import sqlite3
 
+"""
+Game State:
+    0 - No game running.
+    1 - Game prepping and looking for more players.
+    2 - Game is on and we are waiting for the Host to pick a word/phrase.
+    3 - Game is on and we are waiting for the contestent(s) to pick answers.
+    4 - Game is on and we are waiting for the Host to pick the winner.
+"""
+
 def cn(DB):
     """Return the cursor and connection object."""
     conn = sqlite3.connect(DB)
@@ -54,3 +63,19 @@ def deactivatePlayer(DB,player):
         conn.close()
     else: # this should throw an exception.
         pass
+
+def getActivePlayerCount(DB):
+    """Gets the number of active players."""
+    (c,conn) = cn(DB)
+    c.execute('SELECT COUNT(*) FROM Users WHERE active=1')
+    results = c.fetchone()
+    conn.close()
+    return int(results[0])
+
+def getWaitingPlayerCount(DB):
+    """Gets the number of players waiting for the next round."""
+    (c,conn) = cn(DB)
+    c.execute('SELECT COUNT(*) FROM Users WHERE active=2')
+    results = c.fetchone()
+    conn.close()
+    return int(results[0])
