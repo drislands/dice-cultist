@@ -1,0 +1,20 @@
+Data
+ - Host (Users.UserID)
+ - Stage (number)
+ - Word (text)
+Users
+ - UserID (text)
+ - Score (number)
+ - Active (number)
+Answers
+ - User (Users.UserID)
+ - Answer (text)
+Historical_Words
+ - Originator (Users.UserID)
+ - Word (text)
+ - ID (number)
+Historical_Answers
+ - User (Users.UserID)
+ - Word (Historical_Words.ID)
+ - Won (boolean)
+ - ID (number)
