@@ -12,10 +12,12 @@ MIN_PLAYERS = int(os.environ['MIN_PLAYERS'])
 
 
 def verify(token):
+    """Verifies if the token provided matches the one set in .env"""
     return token == verification_token
 
 
-def prep(token):
+def prep(token,user_id):
+    """Performs the Preparation step."""
     if verify(token):
         state = cultdb.getGameState(DB)
         if state != 0:

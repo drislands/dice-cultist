@@ -18,6 +18,10 @@ paths:
                 - Backronyms
             summary: Starts a game of backronyms!
             parameters:
+                - name: user_id
+                  in: formData
+                  required: True
+                  type: string
                 - name: token
                   in: formData
                   required: True
