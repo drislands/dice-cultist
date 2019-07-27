@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
     description: Shed your blood for the greater good...
-    version: "0.0.1"
+    version: "0.0.2"
     title: Dice Cultist API
 consumes:
     - application/x-www-form-urlencoded
@@ -11,59 +11,47 @@ produces:
 basePath: /api
 
 paths:
-    /backronym/start:
+    /backronym/prep:
         post:
-            operationId: backronym.start
+            operationId: backronym.prep #/bk-prep
             tags:
                 - Backronyms
             summary: Starts a game of backronyms!
             parameters:
-                - name: text
-                  in: formData
-                  required: True
-                  type: string
                 - name: token
                   in: formData
                   required: True
                   type: string
-    /backronym/ready:
+    /backronym/start:
         post:
-            operationId: backronym.ready
+            operationId: backronym.start #/bk-start
             tags:
                 - Backronyms
             summary: Begins a game of Backronyms! Only usable once players have joined.
             parameters:
-                - name: text
-                  in: formData
-                  required: True
-                  type: string
                 - name: token
                   in: formData
                   required: True
                   type: string
     /backronym/players:
         post:
-            operationId: backronym.getPlayers
+            operationId: backronym.getPlayers  #/bk-getplayers
             tags:
                 - Backronyms
             summary: Gets a list of active players for the current game.
             parameters:
-                - name: text
-                  in: formData
-                  required: True
-                  type: string
                 - name: token
                   in: formData
                   required: True
                   type: string
     /backronym/score:
         post:
-            operationId: backronym.getScore
+            operationId: backronym.getScore # /bk-getscore [[eph]]
             tags:
                 - Backronyms
             summary: Gets the user's score.
             parameters:
-                - name: text
+                - name: user_id
                   in: formData
                   required: True
                   type: string
@@ -73,12 +61,12 @@ paths:
                   type: string
     /backronym/join:
         post:
-            operationId: backronym.join
+            operationId: backronym.join #/bk-join
             tags:
                 - Backronyms
             summary: Joins the player to the current game.
             parameters:
-                - name: text
+                - name: user_id
                   in: formData
                   required: True
                   type: string
@@ -88,26 +76,26 @@ paths:
                   type: string
     /backronym/help:
         post:
-            operationId: backronym.help
+            operationId: backronym.help #bk-help [[eph]]
             tags:
                 - Backronyms
             summary: Prints help information to the player.
             parameters:
-                - name: text
-                  in: formData
-                  required: True
-                  type: string
                 - name: token
                   in: formData
                   required: True
                   type: string
-    /backronym:
+    /backronym/set/word:
         post:
-            operationId: backronym.set
+            operationId: backronym.setWord #/ bk-setWord [WORD] 
             tags:
                 - Backronyms
             summary: Sets the word for the round if you are the host, or sets your answer if you are a contestant.
             parameters:
+                - name: user_id
+                  in: formData
+                  required: True
+                  type: string
                 - name: text
                   in: formData
                   required: True
@@ -116,44 +104,74 @@ paths:
                   in: formData
                   required: True
                   type: string
-    /backronym/answers:
+    /backronym/set/phrase:
         post:
-            operationId: backronym.getAnswers
+            operationId: backronym.setPhrase #/bk-setPhrase [insert a PHRASE]  
             tags:
                 - Backronyms
-            summary: Provides all the answers given so far this round.
+            summary: Sets the phrase for the round if you are the host, or sets your answer if you are a contestant.
             parameters:
+                - name: user_id
+                  in: formData
+                  required: True
+                  type: string
                 - name: text
                   in: formData
                   required: True
                   type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string
+    /backronym/set/answer:
+        post:
+            operationId: backronym.setAnswer #/bk-setAnswer [eph]  
+            tags:
+                - Backronyms
+            summary: sets your answer if you are a contestant.
+            parameters:
+                - name: user_id
+                  in: formData
+                  required: True
+                  type: string
+                - name: text
+                  in: formData
+                  required: True
+                  type: string
+                - name: token
+                  in: formData
+                  required: True
+                  type: string                                    
+    /backronym/answers:
+        post:
+            operationId: backronym.getAnswers #/ bk-getanswer 
+            tags:
+                - Backronyms
+            summary: Provides all the answers given so far this round, only usable when all answers are set.
+            parameters:
                 - name: token
                   in: formData
                   required: True
                   type: string
     /backronym/word:
         post:
-            operationId: backronym.getWord
+            operationId: backronym.getWord  #/get-word [eph]
             tags:
                 - Backronyms
             summary: Gets the word or phrase that has been set for this round.
             parameters:
-                - name: text
-                  in: formData
-                  required: True
-                  type: string
-                - name: token
+               - name: token
                   in: formData
                   required: True
                   type: string
     /backronym/nudge:
         post:
-            operationId: backronym.nudge
+            operationId: backronym.nudge #/bk-nudge 
             tags:
                 - Backronyms
             summary: Pings players that have yet to provide an answer this round. Only usable by the host.
             parameters:
-                - name: text
+                - name: user_id
                   in: formData
                   required: True
                   type: string
@@ -163,11 +181,15 @@ paths:
                   type: string
     /backronym/pick:
         post:
-            operationId: backronym.pickWinner
+            operationId: backronym.pickWinner #/bk-pick [@user]
             tags:
                 - Backronyms
-            summary: Picks the winner for this round.
+            summary: Picks the winner for this round, only usable by that host.
             parameters:
+            - name: user_id
+                  in: formData
+                  required: True
+                  type: string
                 - name: text
                   in: formData
                   required: True
@@ -178,12 +200,12 @@ paths:
                   type: string
     /backronym/quit:
         post:
-            operationId: backronym.dropOut
+            operationId: backronym.dropOut #/bk-quit
             tags:
                 - Backronyms
-            summary: Removes the activating player from the game, or kicks the specified player if used by the host.
+            summary: Removes the activating player from the game.
             parameters:
-                - name: text
+                - name: user_id
                   in: formData
                   required: True
                   type: string
