@@ -54,6 +54,10 @@ def prep(token,user_id):
                                "process of being set up! Garsh!")
         else:
             response = respond("Let's get it started with some BACKRONYMS!")
+            playerState = cultdb.getPlayerState(DB,user_id)
+            if playerState == -1:
+                cultdb.createPlayer(DB,user_id)
+                cultdb.setPlayerState(DB,user_id,1)
             cultdb.setHost(DB,user_id)
             cultdb.setGameState(DB,1)
         return response
