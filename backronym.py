@@ -95,7 +95,7 @@ def getPlayers(token):
         pass
     else:
         abort(
-            401,"Unverified token."
+            401, "Unverified token."
         )
 #
 def getScore(token,user_id):
@@ -103,7 +103,7 @@ def getScore(token,user_id):
         pass
     else:
         abort(
-            401,"Unverified token."
+            401, "Unverified token."
         )
 #
 def join(token,user_id):
@@ -111,7 +111,7 @@ def join(token,user_id):
         pass
     else:
         abort(
-            401,"Unverified token."
+            401, "Unverified token."
         )
 #
 def help(token):
@@ -119,7 +119,7 @@ def help(token):
         pass
     else:
         abort(
-            401,"Unverified token."
+            401, "Unverified token."
         )
 #
 def setWord(token,text,user_id):
@@ -127,7 +127,7 @@ def setWord(token,text,user_id):
         pass
     else:
         abort(
-            401,"Unverified token."
+            401, "Unverified token."
         )
 #
 def setPhrase(token,text,user_id):
@@ -135,6 +135,61 @@ def setPhrase(token,text,user_id):
         pass
     else:
         abort(
-            401,"Unverified token."
+            401, "Unverified token."
         )
+#
+def setAnswer(token, user_id):
+    """ user sets answer to word chosen """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def getAnswers(token):
+    """to get the answers for the round """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def getWord(token):
+    """ gets the current word """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def nudge(token, user_id):
+    """ nudges the activated player that decided to take a nap  """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def pickWinner (token, user_id):
+    """ what do you think it does....it picks the winner """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def dropOut (token, user_id):
+    """ drops the activated player out of the game """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#  
 ###
