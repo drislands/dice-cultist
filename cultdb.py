@@ -32,6 +32,21 @@ def setGameState(DB,stage):
     conn.commit()
     conn.close()
 
+def createPlayer(DB,player):
+    """Creates a new player with the specified ID, and a score and state of
+    zero. Note that this does not check if the player already exists."""
+    (c,conn) = cn(DB)
+    c.execute('INSERT INTO Users VALUES("%s",0,0)' % player)
+    conn.commit()
+    conn.close()
+
+def setPlayerState(DB,player,state):
+    (c,conn) = cn(DB)
+    c.execute('UPDATE Users SET active="%s" WHERE userID="%s"' %
+              (state,player))
+    conn.commit()
+    conn.close()
+
 def getPlayerState(DB,player):
     (c,conn) = cn(DB)
     c.execute('SELECT active FROM Users WHERE userID="%s"' % player)

@@ -113,8 +113,42 @@ def getScore(token,user_id):
         )
 #
 def join(token,user_id):
+    """Adds the player to the next round, or to the upcoming game."""
     if verify(token):
-        pass
+        gameState = cultdb.getGameState(DB)
+        playerState = cultdb.getPlayerState(DB,user_id)
+
+        new = False
+        if playerState == -1:
+            cultdb.createPlayer(DB,user_id)
+            new = True
+
+        if playerState == 1:
+            response = whisper("Hey now, you're already in!")
+        elif playerState == 2:
+            response = whisper("Not to worry, you're already queued up for " +
+                               "the next round!")
+        else:
+            if gameState == 0:
+                response = whisper("There's no game going on right now" +
+                                   (". " if not new else ", but I've created "
+                                    + "an account for you. ") +
+                                   "Try starting a game yourself with `/bk-prep`!")
+            elif gameState == 1:
+                response = respond("You are set for the upcoming game" +
+                                   (", and any future ones should you choose" +
+                                    " to join!" if new else "!"))
+                cultdb.setPlayerState(DB,user_id,1)
+                # TODO: Announce to the channel if the minimum # of players has
+                # been met.
+            else:
+                response = whisper("Alright, you're on deck for the next " +
+                                   "round!" +
+                                   (" It looks like you haven't played " +
+                                    "before, so I created an account for you" +
+                                    " as well!" if new else ""))
+                cultdb.setPlayerState(DB,user_id,2)
+        return response
     else:
         abort(
             401, "Unverified token."
