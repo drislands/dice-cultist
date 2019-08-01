@@ -90,4 +90,59 @@ def start(token,user_id):
             401,"Unverified token."
         )
 #
+def dropOut (token, user_id):
+    """ drops the activated player out of the game """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def pickWinner (token, user_id):
+    """ what do you think it does....it picks the winner """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def nudge(token, user_id):
+    """ nudges the activated player that decided to take a nap  """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def getWord(token):
+    """ gets the current word """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def getAnswers(token):
+    """to get the answers for the round """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+# 
+def setAnswer(token, user_id):
+    """ user sets answer to word chosen """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#  
+
 ###
