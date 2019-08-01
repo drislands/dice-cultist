@@ -116,3 +116,16 @@ def resetGame(DB):
     c.execute('UPDATE Users SET active="0"')
     conn.commit()
     conn.close()
+
+def getPlayerScore(DB,user_id):
+    """Returns the score of the identified player."""
+    (c,conn) = cn(DB)
+    c.execute('SELECT score FROM Users WHERE userId="%s"' % user_id)
+    results = c.fetchall()
+    if len(results) > 1:
+        pass # this means there are duplicate entries. exception!
+    elif len(results) == 0:
+        # this means there is no entry. whoops!
+        return -1
+    else:
+        return results[0][0]
