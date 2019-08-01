@@ -99,8 +99,14 @@ def getPlayers(token):
         )
 #
 def getScore(token,user_id):
+    """Gets the score of the user in question."""
     if verify(token):
-        pass
+        score = cultdb.getPlayerScore(DB,user_id)
+        if score == -1:
+            response = respond("You haven't registered yet! Play a game!")
+        else:
+            response = respond("Your score is: %s" % score)
+        return response
     else:
         abort(
             401, "Unverified token."
