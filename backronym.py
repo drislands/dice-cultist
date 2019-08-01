@@ -90,4 +90,51 @@ def start(token,user_id):
             401,"Unverified token."
         )
 #
+def getPlayers(token):
+    if verify(token):
+        pass
+    else:
+        abort(
+            401,"Unverified token."
+        )
+#
+def getScore(token,user_id):
+    if verify(token):
+        pass
+    else:
+        abort(
+            401,"Unverified token."
+        )
+#
+def join(token,user_id):
+    if verify(token):
+        pass
+    else:
+        abort(
+            401,"Unverified token."
+        )
+#
+def help(token):
+    if verify(token):
+        pass
+    else:
+        abort(
+            401,"Unverified token."
+        )
+#
+def setWord(token,text,user_id):
+    if verify(token):
+        pass
+    else:
+        abort(
+            401,"Unverified token."
+        )
+#
+def setPhrase(token,text,user_id):
+    if verify(token):
+        pass
+    else:
+        abort(
+            401,"Unverified token."
+        )
 ###
