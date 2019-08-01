@@ -90,8 +90,7 @@ def start(token,user_id):
             401,"Unverified token."
         )
 #
-def dropOut (token, user_id):
-    """ drops the activated player out of the game """
+def getPlayers(token):
     if verify(token):
         pass
     else:
@@ -99,8 +98,7 @@ def dropOut (token, user_id):
             401, "Unverified token."
         )
 #
-def pickWinner (token, user_id):
-    """ what do you think it does....it picks the winner """
+def getScore(token,user_id):
     if verify(token):
         pass
     else:
@@ -108,8 +106,49 @@ def pickWinner (token, user_id):
             401, "Unverified token."
         )
 #
-def nudge(token, user_id):
-    """ nudges the activated player that decided to take a nap  """
+def join(token,user_id):
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def help(token):
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def setWord(token,text,user_id):
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def setPhrase(token,text,user_id):
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def setAnswer(token, user_id):
+    """ user sets answer to word chosen """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def getAnswers(token):
+    """to get the answers for the round """
     if verify(token):
         pass
     else:
@@ -126,17 +165,26 @@ def getWord(token):
             401, "Unverified token."
         )
 #
-def getAnswers(token):
-    """to get the answers for the round """
+def nudge(token, user_id):
+    """ nudges the activated player that decided to take a nap  """
     if verify(token):
         pass
     else:
         abort(
             401, "Unverified token."
         )
-# 
-def setAnswer(token, user_id):
-    """ user sets answer to word chosen """
+#
+def pickWinner (token, user_id):
+    """ what do you think it does....it picks the winner """
+    if verify(token):
+        pass
+    else:
+        abort(
+            401, "Unverified token."
+        )
+#
+def dropOut (token, user_id):
+    """ drops the activated player out of the game """
     if verify(token):
         pass
     else:
@@ -144,5 +192,4 @@ def setAnswer(token, user_id):
             401, "Unverified token."
         )
 #  
-
 ###
