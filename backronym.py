@@ -55,6 +55,14 @@ def validateWord(text):
     if not text.isalpha():
         return False
     return True
+#
+def announce(message):
+    """Immediately sends a message to the default channel."""
+    delayedAnnounce(message,0)
+#
+def delayedAnnounce(message,delay=1.5):
+    """ Sends a message to the default channel with a delay."""
+    pass
 ###
 
 ### API Functions
@@ -152,12 +160,14 @@ def join(token,user_id):
                                     + "an account for you. ") +
                                    "Try starting a game yourself with `/bk-prep`!")
             elif gameState == 1:
+                cultdb.setPlayerState(DB,user_id,1)
+                numPlayers = cultdb.getActivePlayerCount(DB)
                 response = respond("You are set for the upcoming game" +
                                    (", and any future ones should you choose" +
                                     " to join!" if new else "!"))
-                cultdb.setPlayerState(DB,user_id,1)
-                # TODO: Announce to the channel if the minimum # of players has
-                # been met.
+                if numPlayers == MIN_PLAYERS:
+                    delayedAnnounce("We are now at the minimum number of " +
+                                    "players to start the game!")
             else:
                 response = whisper("Alright, you're on deck for the next " +
                                    "round!" +
