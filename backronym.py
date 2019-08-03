@@ -9,6 +9,7 @@ dotenv.load_dotenv(dotenv_path)
 verification_token = os.environ['VERIFICATION_TOKEN']
 DB = os.environ['DB_FILE']
 MIN_PLAYERS = int(os.environ['MIN_PLAYERS'])
+MAX_CHARACTERS = int(os.environ['MAX_CHARACTERS'])
 
 ### General Functions
 def verify(token):
@@ -42,6 +43,18 @@ def formatContestents(contestents):
             else:
                 string += " and %s" % c
     return string
+#
+def validateWord(text):
+    """Determines if the word in question has been set correctly."""
+    if ' ' in text:
+        return False
+    if len(text) > MAX_CHARACTERS:
+        return False
+    if text.upper() != text:
+        return False
+    if not text.isalpha():
+        return False
+    return True
 ###
 
 ### API Functions
@@ -168,7 +181,34 @@ def help(token):
 #
 def setWord(token,text,user_id):
     if verify(token):
-        pass
+        state = cultdb.getGameState(DB)
+        host  = cultdb.getHost(DB)
+        if host != user_id:
+            response = whisper("Sorry, you're not the host! Only the host " +
+                               "can set the word for a given round.")
+        elif state < 2:
+            response = whisper("Hey, " +
+                               ("a" if state == 0 else "the") +
+                               " game hasn't started yet! " +
+                               ("Hold your horses!" if state == 1 else
+                                "Why not start one with `/bk-prep`?"))
+        elif state > 2:
+            response = whisper("It's not the time for that right now!")
+        elif not validateWord(text):
+            response = whisper(("Your word, `%s`, is not valid. Make sure " +
+                                "you specify a single word, all caps, no " +
+                                "more than %s letters long. And no " +
+                                "punctuation either!") %
+                               (text, MAX_CHARACTERS))
+        else:
+            cultdb.setWord(DB,text)
+            cultdb.setGameState(DB,3)
+            response = respond(("Alright! %s, your word is %s! Set your " +
+                               "answers with `/bk-setAnswer`, and remember " +
+                               "to match the word!") %
+                               (formatContestents(cultdb.getContestents(DB)),
+                                text))
+        return response
     else:
         abort(
             401, "Unverified token."
