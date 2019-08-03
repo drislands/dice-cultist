@@ -126,7 +126,7 @@ def getContestents(DB):
 
 def resetGame(DB):
     (c,conn) = cn(DB)
-    c.execute('UPDATE Data SET value="0" WHERE item="stage"')
+    c.execute('UPDATE Data SET value="0" WHERE item="stage" OR item="isPhrase"')
     c.execute('UPDATE Data SET value="unset" WHERE item="host" OR item="word"')
     c.execute('UPDATE Users SET active="0"')
     conn.commit()
@@ -144,3 +144,11 @@ def getPlayerScore(DB,user_id):
         return -1
     else:
         return results[0][0]
+
+def setWord(DB,word):
+    """Sets the word in question."""
+    (c,conn) = cn(DB)
+    c.execute('UPDATE Data SET value="%s" WHERE item="word"' % word)
+    c.execute('UPDATE Data SET value="0" WHERE item="isPhrase"')
+    conn.commit()
+    conn.close()
