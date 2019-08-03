@@ -61,21 +61,25 @@ def validateWord(text):
         return False
     return True
 #
-def announce(message):
+def announce(message,url=None):
     """Immediately sends a message to the default channel."""
-    delayedAnnounce(message,0)
+    delayedAnnounce(message,0,url)
 #
-def delayedAnnounce(message,delay=1.5):
+def delayedAnnounce(message,delay=1.5,url=None):
     """ Sends a message to the default channel with a delay."""
-    t = Thread(target=threadAnnounce,args=(message,delay))
+    t = Thread(target=threadAnnounce,args=(message,delay,url))
     t.start()
-def threadAnnounce(message,delay):
+def threadAnnounce(message,delay,url):
     """Uses threading to make sure the announcement happens regardless."""
     time.sleep(delay)
     data = {
+        "response_type" : "in_channel",
         "text":message
     }
-    r = requests.post(WEBHOOK,json=data)
+    # This allows us to utilize the response_url parameter.
+    if not url:
+        url = WEBHOOK
+    r = requests.post(url,json=data)
     status = r.status_code
     if status != 200:
         pass # TODO: Error handling
@@ -153,7 +157,7 @@ def getScore(token,user_id):
             401, "Unverified token."
         )
 #
-def join(token,user_id):
+def join(token,user_id,response_url):
     """Adds the player to the next round, or to the upcoming game."""
     if verify(token):
         gameState = cultdb.getGameState(DB)
@@ -183,7 +187,8 @@ def join(token,user_id):
                                     " to join!" if new else "!"))
                 if numPlayers == MIN_PLAYERS:
                     delayedAnnounce("We are now at the minimum number of " +
-                                    "players to start the game!")
+                                    "players to start the game!",
+                                    url=response_url)
             else:
                 response = whisper("Alright, you're on deck for the next " +
                                    "round!" +

@@ -94,6 +94,10 @@ paths:
                   in: formData
                   required: True
                   type: string
+                - name: response_url
+                  in: formData
+                  required: True
+                  type: string
             responses:
                 200:
                     description: Successfully authenticated.
