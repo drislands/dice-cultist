@@ -5,6 +5,7 @@ import cultdb
 import requests
 import time
 from threading import Thread
+import re
 
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
@@ -60,6 +61,16 @@ def validateWord(text):
     if not text.isalpha():
         return False
     return True
+#
+def validatePhrase(text):
+    """Determines if the word in the phrase has been set correctly."""
+    pattern = "([A-Z]{2,})"
+    matches = re.findall(pattern,text)
+    if len(matches) != 1:
+        return False
+    if len(matches[0]) > MAX_CHARACTERS:
+        return False
+    return matches[0]
 #
 def announce(message,url=None):
     """Immediately sends a message to the default channel."""
@@ -247,7 +258,36 @@ def setWord(token,text,user_id):
 #
 def setPhrase(token,text,user_id):
     if verify(token):
-        pass
+        state = cultdb.getGameState(DB)
+        host  = cultdb.getHost(DB)
+        word  = validatePhrase(text)
+        if host != user_id:
+            response = whisper("Sorry, you're not the host! Only the host " +
+                               "can set the word for a given round.")
+        elif state < 2:
+            response = whisper("Hey, " +
+                               ("a" if state == 0 else "the") +
+                               " game hasn't started yet! " +
+                               ("Hold your horses!" if state == 1 else
+                                "Why not start one with `/bk-prep`?"))
+        elif state > 2:
+            response = whisper("It's not the time for that right now!")
+        elif not word:
+            response = whisper(("Your phrase, `%s`, is not valid. Make sure " +
+                                "you specify a single word, all caps, no " +
+                                "more than %s letters long. And no " +
+                                "punctuation either!") %
+                               (text, MAX_CHARACTERS))
+        else:
+            cultdb.setPhrase(DB,text)
+            cultdb.setGameState(DB,3)
+            response = respond(("Alright! %s, your phrase is %s, with the " +
+                                "word being *%s*! Set your answers with " +
+                                "`/bk-setAnswer`, and remember to match the " +
+                                "word!") %
+                               (formatContestents(cultdb.getContestents(DB)),
+                                text,word))
+        return response
     else:
         abort(
             401, "Unverified token."
