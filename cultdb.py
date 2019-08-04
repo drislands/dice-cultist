@@ -152,3 +152,11 @@ def setWord(DB,word):
     c.execute('UPDATE Data SET value="0" WHERE item="isPhrase"')
     conn.commit()
     conn.close()
+
+def setPhrase(DB,word):
+    """Sets the phrase in question."""
+    (c,conn) = cn(DB)
+    c.execute('UPDATE Data SET value="%s" WHERE item="word"' % word)
+    c.execute('UPDATE Data SET value="1" WHERE item="isPhrase"')
+    conn.commit()
+    conn.close()
