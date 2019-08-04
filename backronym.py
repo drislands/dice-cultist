@@ -223,34 +223,7 @@ def help(token):
 #
 def setWord(token,text,user_id):
     if verify(token):
-        state = cultdb.getGameState(DB)
-        host  = cultdb.getHost(DB)
-        if host != user_id:
-            response = whisper("Sorry, you're not the host! Only the host " +
-                               "can set the word for a given round.")
-        elif state < 2:
-            response = whisper("Hey, " +
-                               ("a" if state == 0 else "the") +
-                               " game hasn't started yet! " +
-                               ("Hold your horses!" if state == 1 else
-                                "Why not start one with `/bk-prep`?"))
-        elif state > 2:
-            response = whisper("It's not the time for that right now!")
-        elif not validateWord(text):
-            response = whisper(("Your word, `%s`, is not valid. Make sure " +
-                                "you specify a single word, all caps, no " +
-                                "more than %s letters long. And no " +
-                                "punctuation either!") %
-                               (text, MAX_CHARACTERS))
-        else:
-            cultdb.setWord(DB,text)
-            cultdb.setGameState(DB,3)
-            response = respond(("Alright! %s, your word is %s! Set your " +
-                               "answers with `/bk-setAnswer`, and remember " +
-                               "to match the word!") %
-                               (formatContestents(cultdb.getContestents(DB)),
-                                text))
-        return response
+        return setGeneric(text,user_id,False)
     else:
         abort(
             401, "Unverified token."
@@ -258,40 +231,52 @@ def setWord(token,text,user_id):
 #
 def setPhrase(token,text,user_id):
     if verify(token):
-        state = cultdb.getGameState(DB)
-        host  = cultdb.getHost(DB)
-        word  = validatePhrase(text)
-        if host != user_id:
-            response = whisper("Sorry, you're not the host! Only the host " +
-                               "can set the word for a given round.")
-        elif state < 2:
-            response = whisper("Hey, " +
-                               ("a" if state == 0 else "the") +
-                               " game hasn't started yet! " +
-                               ("Hold your horses!" if state == 1 else
-                                "Why not start one with `/bk-prep`?"))
-        elif state > 2:
-            response = whisper("It's not the time for that right now!")
-        elif not word:
-            response = whisper(("Your phrase, `%s`, is not valid. Make sure " +
-                                "you specify a single word, all caps, no " +
-                                "more than %s letters long. And no " +
-                                "punctuation either!") %
-                               (text, MAX_CHARACTERS))
-        else:
-            cultdb.setPhrase(DB,text)
-            cultdb.setGameState(DB,3)
-            response = respond(("Alright! %s, your phrase is %s, with the " +
-                                "word being *%s*! Set your answers with " +
-                                "`/bk-setAnswer`, and remember to match the " +
-                                "word!") %
-                               (formatContestents(cultdb.getContestents(DB)),
-                                text,word))
-        return response
+        return setGeneric(text,user_id,True)
     else:
         abort(
             401, "Unverified token."
         )
+#
+def setGeneric(text,user_id,isPhrase):
+    state = cultdb.getGameState(DB)
+    host  = cultdb.getHost(DB)
+    if isPhrase:
+        word = validatePhrase(text)
+    else:
+        word = validateWord(text)
+    if host != user_id:
+        response = whisper("Sorry, you're not the host! Only the host " +
+                           "can set the word for a given round.")
+    elif state < 2:
+        response = whisper("Hey, " +
+                           ("a" if state == 0 else "the") +
+                           " game hasn't started yet! " +
+                           ("Hold your horses!" if state == 1 else
+                            "Why not start one with `/bk-prep`?"))
+    elif state > 2:
+        response = whisper("It's not the time for that right now!")
+    elif not word:
+        response = whisper(("Your " +
+                            ("word" if not isPhrase else "phrase") +
+                            ", `%s`, is not valid. Make sure " +
+                            "you specify a single all caps word, no " +
+                            "more than %s letters long, with no " +
+                            "punctuation in the word like apostrophes.") %
+                           (text, MAX_CHARACTERS))
+    else:
+        if isPhrase:
+            cultdb.setPhrase(DB,text)
+        else:
+            cultdb.setWord(DB,text)
+        cultdb.setGameState(DB,3)
+        response = respond(("Alright! %s, your word is *%s*" +
+                            (", from the phrase *%s*" %
+                             text if isPhrase else "") + "! Set your " +
+                           "answers with `/bk-setAnswer`, and remember " +
+                           "to match the word!") %
+                           (formatContestents(cultdb.getContestents(DB)),
+                            (word if isPhrase else text)))
+    return response
 #
 def setAnswer(token, user_id):
     """ user sets answer to word chosen """
