@@ -147,16 +147,17 @@ def getPlayerScore(DB,user_id):
 
 def setWord(DB,word):
     """Sets the word in question."""
-    (c,conn) = cn(DB)
-    c.execute('UPDATE Data SET value="%s" WHERE item="word"' % word)
-    c.execute('UPDATE Data SET value="0" WHERE item="isPhrase"')
-    conn.commit()
-    conn.close()
+    setGeneric(DB,word,False)
 
 def setPhrase(DB,word):
     """Sets the phrase in question."""
+    setGeneric(DB,word,True)
+
+def setGeneric(DB,word,isPhrase):
+    """Sets the word or phrase."""
     (c,conn) = cn(DB)
     c.execute('UPDATE Data SET value="%s" WHERE item="word"' % word)
-    c.execute('UPDATE Data SET value="1" WHERE item="isPhrase"')
+    c.execute('UPDATE Data SET value="%s" WHERE item="isPhrase"' %
+              (1 if isPhrase else 0))
     conn.commit()
     conn.close()
