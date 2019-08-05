@@ -1,0 +1,3 @@
+DiceCultist
+python-dotenv==0.10.3
+connexion[swagger-ui]==2.3.0
