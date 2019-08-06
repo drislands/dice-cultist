@@ -278,10 +278,31 @@ def setGeneric(text,user_id,isPhrase):
                             (word if isPhrase else text)))
     return response
 #
-def setAnswer(token, user_id):
+def setAnswer(token, user_id, text):
     """ user sets answer to word chosen """
     if verify(token):
-        pass
+        answers = cultdb.getAnswers(DB)
+        if user_id not in cultdb.getContestents(DB):
+            # TODO: Have a more nuanced answer depending on the player's state
+            response = whisper("You're not in this round! If you haven't " +
+                               "signed up already, you can do so with " +
+                               "`/bk-join`! If you're on deck, just wait " +
+                               "for the next round!")
+        elif user_id in answers:
+            # TODO: Add the option at some point to reset your answer if you
+            # want.
+            response = whisper("You've already set your answer! Yours is " +
+                               "`%s` in case you forgot!" % answers[user_id])
+        elif not verifyAnswer(text):
+            response = whisper(("The answer you provided, `%s`, isn't valid." +
+                                " The word you need to match is `%s`. Make " +
+                                "sure you match each letter with a " +
+                                "Capitalized word, and that any extra words " +
+                                "like `to` or `and` are lowercase.") %
+                               (text,cultdb.getWord(DB))) # TODO: Define this function!
+        else:
+            pass
+            # TODO: Finish this!
     else:
         abort(
             401, "Unverified token."

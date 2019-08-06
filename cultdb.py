@@ -125,10 +125,13 @@ def getContestents(DB):
     return res
 
 def resetGame(DB):
+    """Resets the game entirely. Does not reset scores or history."""
+    # TODO: Separate each of these into its own function.
     (c,conn) = cn(DB)
     c.execute('UPDATE Data SET value="0" WHERE item="stage" OR item="isPhrase"')
     c.execute('UPDATE Data SET value="unset" WHERE item="host" OR item="word"')
     c.execute('UPDATE Users SET active="0"')
+    c.execute('DELETE FROM Answers')
     conn.commit()
     conn.close()
 
@@ -159,5 +162,23 @@ def setGeneric(DB,word,isPhrase):
     c.execute('UPDATE Data SET value="%s" WHERE item="word"' % word)
     c.execute('UPDATE Data SET value="%s" WHERE item="isPhrase"' %
               (1 if isPhrase else 0))
+    conn.commit()
+    conn.close()
+
+def getAnswers(DB):
+    """Gets a map of users and their answers for this round."""
+    (c,conn) = cn(DB)
+    c.execute('SELECT user,answer FROM Answers')
+    results = c.fetchall()
+    answers = {}
+    for a in results:
+        answers[a[0]] = a[1]
+    return answers
+
+def setAnswer(DB,user_id,answer):
+    """Sets a user's answer."""
+    # TODO: Some kind of exception handling?
+    (c,conn) = cn(DB)
+    c.execute('INSERT INTO Answers VALUES("%s","%s")' % (user_id,answer))
     conn.commit()
     conn.close()
