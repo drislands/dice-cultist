@@ -18,3 +18,5 @@ Historical_Answers
  - Word (Historical_Words.ID)
  - Won (boolean)
  - ID (number)
+Minor_Words
+ - Word

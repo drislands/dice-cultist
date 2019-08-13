@@ -80,6 +80,7 @@ def delayedAnnounce(message,delay=1.5,url=None):
     """ Sends a message to the default channel with a delay."""
     t = Thread(target=threadAnnounce,args=(message,delay,url))
     t.start()
+#
 def threadAnnounce(message,delay,url):
     """Uses threading to make sure the announcement happens regardless."""
     time.sleep(delay)
@@ -94,6 +95,9 @@ def threadAnnounce(message,delay,url):
     status = r.status_code
     if status != 200:
         pass # TODO: Error handling
+#
+def verifyAnswer(word):
+    return True
 ###
 
 ### API Functions
@@ -278,12 +282,17 @@ def setGeneric(text,user_id,isPhrase):
                             (word if isPhrase else text)))
     return response
 #
-def setAnswer(token, user_id, text):
+def setAnswer(token, user_id, text, response_url):
     """ user sets answer to word chosen """
     if verify(token):
+        gameState = cultdb.getGameState(DB)
         answers = cultdb.getAnswers(DB)
-        if user_id not in cultdb.getContestents(DB):
+        contestents = cultdb.getContestents(DB)
+        if gameState != 3:
+            response = whisper("It's not the time to send an answer in yet!")
+        elif user_id not in contestents:
             # TODO: Have a more nuanced answer depending on the player's state
+            # TODO: Have a case when the host does it erroneously
             response = whisper("You're not in this round! If you haven't " +
                                "signed up already, you can do so with " +
                                "`/bk-join`! If you're on deck, just wait " +
@@ -301,7 +310,17 @@ def setAnswer(token, user_id, text):
                                 "like `to` or `and` are lowercase.") %
                                (text,cultdb.getWord(DB))) # TODO: Define this function!
         else:
-            pass
+            cultdb.setAnswer(DB,user_id,text)
+            response = whisper("Your answer has been received!")
+            delayedAnnounce("%s has set their answer!" % user_id, delay = 1,
+                            url = response_url)
+            if len(cultdb.getAnswers(DB)) == len(contestents):
+                host = cultdb.getHost(DB)
+                delayedAnnounce(("%s, all answers have been sent in! See " +
+                                "what they are with `/bk-getAnswers`!") % host,
+                                delay = 2, url = response_url)
+                cultdb.setGameState(DB,4)
+        return response
             # TODO: Finish this!
     else:
         abort(
