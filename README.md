@@ -5,7 +5,7 @@ slash commands, SQLite files instead of MySQL servers, and more!
 <p>To get started, first clone the git project:</p>
 <code>git clone https://www.github.com/drislands/dice-cultist.git</code>
 <p>Next, <code>cd</code> into the directory, and set up the virtual environment
-with <code>python -m venv env</code>.</p>
+with <code>python3 -m venv env</code>.</p>
 <p>Now that you've got the virtual environment established, you'll need to
 activate it. Do so by typing <code>source env/bin/activate</code>. You'll know
 this has succeeded if the prompt in your terminal now is preceded with the text
