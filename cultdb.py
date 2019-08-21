@@ -1,4 +1,5 @@
 import sqlite3
+import re
 
 """
 Game State:
@@ -122,6 +123,7 @@ def getContestents(DB):
     c.execute('SELECT userid FROM Users WHERE userid!="%s" AND active="1"' % host)
     results = c.fetchall()
     res = [x[0] for x in results]
+    conn.close()
     return res
 
 def resetGame(DB):
@@ -140,6 +142,7 @@ def getPlayerScore(DB,user_id):
     (c,conn) = cn(DB)
     c.execute('SELECT score FROM Users WHERE userId="%s"' % user_id)
     results = c.fetchall()
+    conn.close()
     if len(results) > 1:
         pass # this means there are duplicate entries. exception!
     elif len(results) == 0:
@@ -173,6 +176,7 @@ def getAnswers(DB):
     answers = {}
     for a in results:
         answers[a[0]] = a[1]
+    conn.close()
     return answers
 
 def setAnswer(DB,user_id,answer):
@@ -182,3 +186,18 @@ def setAnswer(DB,user_id,answer):
     c.execute('INSERT INTO Answers VALUES("%s","%s")' % (user_id,answer))
     conn.commit()
     conn.close()
+
+def getWord(DB):
+    """Gets the set word from the database, returns false if unset."""
+    (c,conn) = cn(DB)
+    c.execute('SELECT value FROM Data WHERE item="Word"')
+    word = c.fetchall()
+    if word == "unset":
+        return False
+    c.execute('SELECT value FROM Data WHERE item="isPhrase"')
+    isPhrase = c.fetchall()
+    isPhrase = isPhrase[0][0]
+    if isPhrase:
+        word = re.findall("([A-Z]{2,})",word)[0]
+    conn.close()
+    return word
