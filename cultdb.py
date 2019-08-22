@@ -190,8 +190,9 @@ def setAnswer(DB,user_id,answer):
 def getWord(DB):
     """Gets the set word from the database, returns false if unset."""
     (c,conn) = cn(DB)
-    c.execute('SELECT value FROM Data WHERE item="Word"')
+    c.execute('SELECT value FROM Data WHERE item="word"')
     word = c.fetchall()
+    word = word[0][0]
     if word == "unset":
         return False
     c.execute('SELECT value FROM Data WHERE item="isPhrase"')
@@ -201,3 +202,11 @@ def getWord(DB):
         word = re.findall("([A-Z]{2,})",word)[0]
     conn.close()
     return word
+
+def getMinorWords(DB):
+    """Gets the full list of minor words in the database."""
+    (c,conn) = cn(DB)
+    c.execute('SELECT word FROM minor_words')
+    results = c.fetchall()
+    conn.close()
+    return [x[0] for x in results]

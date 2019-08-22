@@ -96,7 +96,24 @@ def threadAnnounce(message,delay,url):
     if status != 200:
         pass # TODO: Error handling
 #
-def verifyAnswer(word):
+def verifyAnswer(answer):
+    """Confirms whether or not the given answer matches the set word."""
+    def isCap(w):
+        """Returns true if the first letter is caps and no others are."""
+        if not w[0].isupper():
+            return False
+        for c in w[1:]:
+            if c.isupper():
+                return False
+        return True
+    word = cultdb.getWord(DB)
+    extras = cultdb.getMinorWords(DB)
+    userWords = answer.split(' ')
+    if not (isCap(userWords[0]) and isCap(userWords[-1])):
+        return False
+    for w in userWords[1:-1]:
+        if not (w in extras or isCap(w)):
+            return False
     return True
 ###
 
