@@ -180,9 +180,9 @@ def getScore(token,user_id):
     if verify(token):
         score = cultdb.getPlayerScore(DB,user_id)
         if score == -1:
-            response = respond("You haven't registered yet! Play a game!")
+            response = whisper("You haven't registered yet! Play a game!")
         else:
-            response = respond("Your score is: %s" % score)
+            response = whisper("Your score is: %s" % score)
         return response
     else:
         abort(
